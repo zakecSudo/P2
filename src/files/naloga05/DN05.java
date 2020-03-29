@@ -11,7 +11,6 @@ public class DN05 {
         //izrisiLabirint(preberiLabirint(args[0]));
         //preberiResitev(args[1]);
         //preveriResitev(preberiLabirint(args[0]), preberiResitev(args[1]));
-        System.out.println("");
         izrisiLabirint(narediLabirint(10,10, 1));
 
     }
