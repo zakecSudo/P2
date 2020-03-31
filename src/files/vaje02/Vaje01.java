@@ -1,4 +1,4 @@
-package Vaje;
+package files.vaje02;
 
 public class Vaje01 {
     public static void main(String [] args) {

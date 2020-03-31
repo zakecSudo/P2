@@ -1,3 +1,4 @@
+package files.vaje04;
 
 import java.util.Random;
 

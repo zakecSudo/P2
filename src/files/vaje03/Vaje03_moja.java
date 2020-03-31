@@ -1,9 +1,10 @@
-package Vaje;
+package files.vaje03;
 
-public class Vaja3 {
+public class Vaje03_moja {
 
 
     public static void main(String [] args) {
+        /*
         izpisiZnak16bit((short)0b1001111110011111);
         System.out.println("");
         izpisiNiz16bit("Programiranje je zakon");
@@ -11,7 +12,7 @@ public class Vaja3 {
         izpisiZnak64bit(0b1010010101111110001111001111111111011011011111100011110000011000L);
         System.out.println("");
         izpisiNiz64bit("Juhej");
-
+        */
     }
 
     private static final char znak = '\u2B1B'; // Square character ⬛
