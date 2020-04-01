@@ -15,7 +15,7 @@ public class test {
         //preberiResitev(args[1]);
         //preveriResitev(preberiLabirint(args[0]), preberiResitev(args[1]));
         //System.out.println("");
-        int[][] labirint = narisiStene(10,10, 1);
+        int[][] labirint = narisiStene(20,20, 1);
         izrisiLabirint(labirint);
     }
 
@@ -187,61 +187,83 @@ public class test {
             }
             labirint[nakljucnoStVisina][sodoSirina] = 1;
         }
+
         labirint = rekurzija(labirint, nakljucnoStSirina, nakljucnoStVisina, visina, sirina, verjetnost);
         return labirint;
-    }
-
-
-    public static int[][] labirintOdDo(int[][] zamenjanec, int[][] drugi, int zgornjaX, int zgornjaY) {
-        int x = 0;
-        int y = 0;
-        for(int i = zgornjaY; i < (zgornjaY + drugi.length); i++) {
-            x = 0;
-            for(int a = zgornjaX; a < (zgornjaX + drugi[0].length); a++) {
-                zamenjanec[y][x] = drugi[i][a];
-                x++;
-            }
-            y++;
-        }
-        return zamenjanec;
     }
 
     // 4.korak
     /*
 ------------------------------------------------------------
-    THIS METHOD IS THE RECURSION
+    REKURZIJA
 ------------------------------------------------------------
      */
     public static int[][] rekurzija(int[][] labirint, int nakljucnoStSirina, int nakljucnoStVisina, int visina, int sirina, double verjetnost) {
         //kvadrati = {0 sirina, 1 visina, 2 x koordinata zgornji levi kot, 3 y koordinata zgornji levi kot, 4 x koordinata spodnji desni kot, 5 y koordinata spodnji desni kot}
         int[][]kvadrati = {{(nakljucnoStSirina + 1) / 2, (nakljucnoStVisina + 1) / 2, 0, 0, nakljucnoStSirina - 1, nakljucnoStVisina - 1}, //Levo zgoraj
-                {(2 * sirina - 1) - (nakljucnoStSirina + 1), nakljucnoStSirina + 1, 0, nakljucnoStVisina - 1, 2 * sirina - 2}, //Desno zgoraj
-                {nakljucnoStSirina, (2 * visina - 1) - (nakljucnoStVisina + 1), 0, nakljucnoStVisina + 1, nakljucnoStSirina - 1, 2 * visina - 2}, //Levo spodaj
-                {(2 * sirina - 1) - (nakljucnoStSirina + 1), (2 * visina - 1) - (nakljucnoStVisina + 1), nakljucnoStSirina + 1, nakljucnoStVisina + 1, 2 * sirina -2, 2 * sirina - 2}}; //Desno spodaj
+                          {(((2 * sirina - 1) - (nakljucnoStSirina + 1)) + 1) / 2, ((nakljucnoStVisina) + 1) / 2, nakljucnoStSirina + 1, 0, 2 * sirina - 2, nakljucnoStVisina - 1}, //Desno zgoraj
+                          {((nakljucnoStSirina) + 1) / 2, (((2 * visina - 1) - (nakljucnoStVisina + 1)) + 1) / 2, 0, nakljucnoStVisina + 1, nakljucnoStSirina - 1, 2 * visina - 2}, //Levo spodaj
+                          {(((2 * sirina - 1) - (nakljucnoStSirina + 1)) + 1) / 2, (((2 * visina - 1) - (nakljucnoStVisina + 1)) + 1) / 2, nakljucnoStSirina + 1, nakljucnoStVisina + 1, 2 * sirina - 2, 2 * visina - 2}}; //Desno spodaj
 
         if (sirina > 1 && visina > 1) {
-            int x = 0;
-            int y = 0;
-            izrisiLabirint(labirint);
-            int[][] kvadratek = narisiStene(kvadrati[0][0], kvadrati[0][1], verjetnost);
-            for(int i = 0; i < kvadrati.length; i++) {
-                System.out.println(".....................................");
-                int s = kvadrati[i][3];
-                int z =  kvadrati[i][5];
-                for (int f = kvadrati[i][3]; f < kvadrati[i][5]; f++) {
-                    x = 0;
-                    for (int g = kvadrati[i][2]; g < kvadrati[i][4]; g++) {
-                        labirint[f][g] = kvadratek[y][x];
-                        x++;
-                        izrisiLabirint(labirint);
-                    }
-                    y++;
+            int x;
+            int y;
+            int i;
+            int a;
+            if(kvadrati[0][0] > 1 && kvadrati[0][1] > 1);
+                int[][] leviZgoraj = narisiStene(kvadrati[0][0], kvadrati[0][1], verjetnost);
+            if(kvadrati[1][0] > 1 && kvadrati[1][1] > 1);
+                int[][] desniZgoraj = narisiStene(kvadrati[1][0], kvadrati[1][1], verjetnost);
+            if(kvadrati[2][0] > 1 && kvadrati[2][1] > 1);
+                int[][] leviSpodaj = narisiStene(kvadrati[2][0], kvadrati[2][1], verjetnost);
+            if(kvadrati[3][0] > 1 && kvadrati[3][1] > 1);
+                int[][] desniSpodaj = narisiStene(kvadrati[3][0], kvadrati[3][1], verjetnost);
+
+            //Levi zgoraj
+            y = 0;
+            for(i = kvadrati[0][3]; i < kvadrati[0][5]; i++) {
+                x = 0;
+                for(a = kvadrati[0][2]; a < kvadrati[0][4]; a++) {
+                    labirint[i][a] = leviZgoraj[y][x];
+                    x++;
                 }
+            y++;
             }
+            //Desni zgoraj
+            y = 0;
+            for(i = kvadrati[1][3]; i < kvadrati[1][5]; i++) {
+                x = 0;
+                for(a = kvadrati[1][2]; a < kvadrati[1][4]; a++) {
+                    labirint[i][a] = desniZgoraj[y][x];
+                    x++;
+                }
+                y++;
+            }
+            //Levi spodaj
+            y = 0;
+            for(i = kvadrati[2][3]; i < kvadrati[2][5]; i++) {
+                x = 0;
+                for(a = kvadrati[2][2]; a < kvadrati[2][4]; a++) {
+                    labirint[i][a] = leviSpodaj[y][x];
+                    x++;
+                }
+                y++;
+            }
+            //Desni spodaj
+            y = 0;
+            for(i = kvadrati[3][3]; i < kvadrati[3][5]; i++) {
+                x = 0;
+                for(a = kvadrati[3][2]; a < kvadrati[3][4]; a++) {
+                    labirint[i][a] = desniSpodaj[y][x];
+                    x++;
+                }
+                y++;
+            }
+
         } else {
             return labirint;
         }
         return labirint;
-
     }
+
 }

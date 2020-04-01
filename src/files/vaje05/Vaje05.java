@@ -1,6 +1,6 @@
-package vaje05;
+package files.vaje05;
 
-import vaje03.Vaje03;
+import files.vaje03.Vaje03;
 import java.util.Scanner;
 
 public class Vaje05 {
@@ -146,7 +146,7 @@ class Seznam {
             String[] trgovina = spisek();
             for(int i = 0; i < trgovina.length; i++) {
                 System.out.println("");
-                vaje03.Vaje03.izpisiNiz64bit(trgovina[i]);
+                files.vaje03.Vaje03.izpisiNiz64bit(trgovina[i]);
             }
         }
     }

@@ -1,19 +1,37 @@
 
-package naloga05;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
 
 public class DN05 {
-    public static void main(String[] args) throws Exception {
-        //preberiLabirint(args[0]);
-        //izrisiLabirint(preberiLabirint(args[0]));
-        //preberiResitev(args[1]);
-        //preveriResitev(preberiLabirint(args[0]), preberiResitev(args[1]));
-        System.out.println("");
-        izrisiLabirint(narediLabirint(10,10, 1));
+    //razdeljenLabirint = {0 sirina, 1 visina, 2 x koordinata zgornji levi kot, 3 y koordinata zgornji levi kot, 4 x koordinata spodnji desni kot, 5 y koordinata spodnji desni kot}
+    public static int[][] razdeljenLabirint = new int[4][6];
 
+    public static void main(String[] args) throws Exception {
+        if(args.length == 2) {
+           int[][] labirint = preberiLabirint(args[0]);
+           izrisiLabirint(labirint);
+           int[] resitev = preberiResitev(args[1]);
+           preveriResitev(labirint, resitev);
+        }
+        if(args.length == 3) {
+            int sirina = Integer.parseInt(args[0]);
+            int visina = Integer.parseInt(args[1]);
+            int verjetnost = Integer.parseInt(args[2]);
+            int [][] nekaj = narediLabirint(sirina, visina, verjetnost);
+            izrisiLabirint(nekaj);
+            shraniLabirint(nekaj, "labirint");
+
+        }
+
+        //C:\Users\Zakec\Desktop
+        /*
+        int[][] labirint = narediLabirint(3,10, 1);
+        izrisiLabirint(labirint);
+        shraniLabirint(labirint, "C:\\Users\\Zakec\\Desktop\\test.txt");
+        */
     }
 
     public static int[][] preberiLabirint(String ime) throws Exception {
@@ -91,6 +109,8 @@ public class DN05 {
         else
             return new Random().nextInt(max - min) + min;
     }
+
+
     public static int[][] narediLabirint(int sirina, int visina, double verjetnost) {
         int[][] labirint = new int[2 * visina - 1][2 * sirina - 1];
         // 1.korak
@@ -114,6 +134,7 @@ public class DN05 {
             else
                 nakljucnoStVisina = 1;
         }
+        //Nakljucno sodo stevilo v interavlu dimenzij
         while(nakljucnoStSirina % 2 == 0 && 2 * sirina - 1 > 2 || nakljucnoStVisina % 2 == 0 && 2 * visina - 1 > 2) {
             if(nakljucnoStSirina % 2 == 0)
                 nakljucnoStSirina = rnd.nextInt(2 * sirina - 1);
@@ -178,50 +199,95 @@ public class DN05 {
             }
             labirint[nakljucnoStVisina][sodoSirina] = 1;
         }
-        // 4.korak
-        izrisiLabirint(labirint);
-        rekurzija(labirint, nakljucnoStSirina, nakljucnoStVisina, visina, sirina, verjetnost);
+
+        labirint = rekurzija(labirint, nakljucnoStSirina, nakljucnoStVisina, visina, sirina, verjetnost);
         return labirint;
     }
 
-
     // 4.korak
+    /*
+------------------------------------------------------------
+    REKURZIJA
+------------------------------------------------------------
+     */
     public static int[][] rekurzija(int[][] labirint, int nakljucnoStSirina, int nakljucnoStVisina, int visina, int sirina, double verjetnost) {
         //kvadrati = {0 sirina, 1 visina, 2 x koordinata zgornji levi kot, 3 y koordinata zgornji levi kot, 4 x koordinata spodnji desni kot, 5 y koordinata spodnji desni kot}
         int[][]kvadrati = {{(nakljucnoStSirina + 1) / 2, (nakljucnoStVisina + 1) / 2, 0, 0, nakljucnoStSirina - 1, nakljucnoStVisina - 1}, //Levo zgoraj
-                           {(2 * sirina - 1) - (nakljucnoStSirina + 1), nakljucnoStSirina + 1, 0, nakljucnoStVisina - 1, 2 * sirina - 2}, //Desno zgoraj
-                           {nakljucnoStSirina, (2 * visina - 1) - (nakljucnoStVisina + 1), 0, nakljucnoStVisina + 1, nakljucnoStSirina - 1, 2 * visina - 2}, //Levo spodaj
-                           {(2 * sirina - 1) - (nakljucnoStSirina + 1), (2 * visina - 1) - (nakljucnoStVisina + 1), nakljucnoStSirina + 1, nakljucnoStVisina + 1, 2 * sirina -2, 2 * sirina - 2}}; //Desno spodaj
+                {(((2 * sirina - 1) - (nakljucnoStSirina + 1)) + 1) / 2, ((nakljucnoStVisina) + 1) / 2, nakljucnoStSirina + 1, 0, 2 * sirina - 2, nakljucnoStVisina - 1}, //Desno zgoraj
+                {((nakljucnoStSirina) + 1) / 2, (((2 * visina - 1) - (nakljucnoStVisina + 1)) + 1) / 2, 0, nakljucnoStVisina + 1, nakljucnoStSirina - 1, 2 * visina - 2}, //Levo spodaj
+                {(((2 * sirina - 1) - (nakljucnoStSirina + 1)) + 1) / 2, (((2 * visina - 1) - (nakljucnoStVisina + 1)) + 1) / 2, nakljucnoStSirina + 1, nakljucnoStVisina + 1, 2 * sirina - 2, 2 * visina - 2}}; //Desno spodaj
 
-        for(int e = 0; e < kvadrati.length; e++) {
-            if (sirina > 1 && visina > 1) {
-                int x = 0;
-                int y = 0;
-                int[][] kvadratek = narediLabirint(kvadrati[e][0], kvadrati[e][1], verjetnost);
-                System.out.println(".....................................");
-                izrisiLabirint(kvadratek);
-                System.out.println("sirina kvadratka " + kvadratek[0].length);
-                System.out.println("visina kvadratka " + kvadratek.length);
-                for (int f = kvadrati[e][3]; f <= kvadrati[e][5]; f++) {
-                    x = 0;
-                    for (int g = kvadrati[e][2]; g <= kvadrati[e][4]; g++) {
-                        System.out.println("x koordinata: " + g);
-                        System.out.println("y koordinata: " + f);
-                        System.out.println("kot x " + kvadrati[0][4]);
-                        System.out.println("kot y " + kvadrati[0][5]);
-                        System.out.println("Visina labirinta:" + labirint.length);
-                        labirint[f][g] = kvadratek[y][x];
-                        x++;
-                    }
-                    y++;
-                    izrisiLabirint(labirint);
+        if (sirina > 1 && visina > 1) {
+            int x;
+            int y;
+            int i;
+            int a;
+            if(kvadrati[0][0] > 1 && kvadrati[0][1] > 1);
+            int[][] leviZgoraj = narediLabirint(kvadrati[0][0], kvadrati[0][1], verjetnost);
+            if(kvadrati[1][0] > 1 && kvadrati[1][1] > 1);
+            int[][] desniZgoraj = narediLabirint(kvadrati[1][0], kvadrati[1][1], verjetnost);
+            if(kvadrati[2][0] > 1 && kvadrati[2][1] > 1);
+            int[][] leviSpodaj = narediLabirint(kvadrati[2][0], kvadrati[2][1], verjetnost);
+            if(kvadrati[3][0] > 1 && kvadrati[3][1] > 1);
+            int[][] desniSpodaj = narediLabirint(kvadrati[3][0], kvadrati[3][1], verjetnost);
+
+            //Levi zgoraj
+            y = 0;
+            for(i = kvadrati[0][3]; i < kvadrati[0][5]; i++) {
+                x = 0;
+                for(a = kvadrati[0][2]; a < kvadrati[0][4]; a++) {
+                    labirint[i][a] = leviZgoraj[y][x];
+                    x++;
                 }
-                return labirint;
-            } else {
-                return labirint;
+                y++;
+            }
+            //Desni zgoraj
+            y = 0;
+            for(i = kvadrati[1][3]; i < kvadrati[1][5]; i++) {
+                x = 0;
+                for(a = kvadrati[1][2]; a < kvadrati[1][4]; a++) {
+                    labirint[i][a] = desniZgoraj[y][x];
+                    x++;
+                }
+                y++;
+            }
+            //Levi spodaj
+            y = 0;
+            for(i = kvadrati[2][3]; i < kvadrati[2][5]; i++) {
+                x = 0;
+                for(a = kvadrati[2][2]; a < kvadrati[2][4]; a++) {
+                    labirint[i][a] = leviSpodaj[y][x];
+                    x++;
+                }
+                y++;
+            }
+            //Desni spodaj
+            y = 0;
+            for(i = kvadrati[3][3]; i < kvadrati[3][5]; i++) {
+                x = 0;
+                for(a = kvadrati[3][2]; a < kvadrati[3][4]; a++) {
+                    labirint[i][a] = desniSpodaj[y][x];
+                    x++;
+                }
+                y++;
             }
 
+        } else {
+            return labirint;
         }
         return labirint;
     }
+    public static void shraniLabirint(int[][] labirint, String ime) throws Exception{
+        String datoteka = String.format("%s_%d_%d.txt", ime, (labirint[0].length + 1) / 2, (labirint.length + 1) / 2);
+        PrintWriter vpisi = new PrintWriter(datoteka);
+        for(int i = 0; i < labirint.length; i++) {
+            for(int a = 0; a < labirint[0].length; a++) {
+                vpisi.print(labirint[i][a]);
+            }
+            vpisi.println("");
+        }
+        vpisi.close();
+    }
+
+
 }
