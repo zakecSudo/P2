@@ -1,4 +1,4 @@
-
+package naloga05;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class DN05 {
     //razdeljenLabirint = {0 sirina, 1 visina, 2 x koordinata zgornji levi kot, 3 y koordinata zgornji levi kot, 4 x koordinata spodnji desni kot, 5 y koordinata spodnji desni kot}
-    public static int[][] razdeljenLabirint = new int[4][6];
 
     public static void main(String[] args) throws Exception {
         if(args.length == 2) {
